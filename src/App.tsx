@@ -6,6 +6,8 @@ import { Button } from './components/atoms/Buttons/Button';
 import { Input } from './components/atoms/Input';
 import { Tabs } from './components/atoms/Tabs';
 import styled from 'styled-components';
+import { Search } from './components/atoms/Buttons/Search';
+import { Authorize } from './components/atoms/Buttons/Authorize';
 
 function App() {
   const onClick = () => {
@@ -55,6 +57,10 @@ function App() {
           onClick={onClick}
           icon={<FavoriteIconStyled />}
         />
+        <Search />
+        <Authorize onClick={onClick} theme={'primary'} userName="" />
+        <Authorize onClick={onClick} theme={'primary'} userName="William Shakespeare" />
+        <Authorize onClick={onClick} theme={'primary'} userName="Opa Loper" />
       </header>
     </div>
   );
