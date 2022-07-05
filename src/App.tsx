@@ -64,10 +64,10 @@ function App() {
         <Authorize onClick={onClick} theme={'primary'} userName="William Shakespeare" />
         <Authorize onClick={onClick} theme={'primary'} userName="Opa Loper" />
 
-        <LikeButton onClick={onClick} theme={'default'} state />
-        <LikeButton onClick={onClick} theme={'default'} state disabled={true} />
-        <DislikeButton onClick={onClick} theme={'default'} state={false} />
-        <DislikeButton onClick={onClick} theme={'default'} state={false} disabled={true} />
+        <LikeButton onClick={onClick} />
+        <LikeButton onClick={onClick} disabled={true} />
+        <DislikeButton onClick={onClick} />
+        <DislikeButton onClick={onClick} disabled={true} />
       </header>
     </div>
   );

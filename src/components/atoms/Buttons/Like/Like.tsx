@@ -4,50 +4,14 @@ import styled from 'styled-components';
 import { ColorService } from '../../../../services/ColorService';
 import { ReactComponent as LikeIcon } from './../../../../assets/icons/like.svg';
 
-const getTheme = (theme: 'primary' | 'secondary' | 'delete' | 'default'): IButtonStyled => {
-  if (theme === 'delete') {
-    return {
-      bgDefault: ColorService.ERROR,
-      bgHover: ColorService.ERROR,
-      colorBorderDefault: ColorService.ERROR,
-      colorBorderHover: ColorService.ERROR,
-      bgDisabled: ColorService.TRANSPARENT,
-      color: ColorService.WHITE,
-      colorHover: ColorService.WHITE,
-    };
-  }
-
-  if (theme === 'secondary') {
-    return {
-      bgDefault: ColorService.LIGHT,
-      bgHover: ColorService.MEDIUM,
-      colorBorderDefault: ColorService.LIGHT,
-      colorBorderHover: ColorService.MEDIUM,
-      bgDisabled: ColorService.LIGHT,
-      color: ColorService.SECONDARY,
-      colorHover: ColorService.SECONDARY,
-    };
-  }
-
-  if (theme === 'primary') {
-    return {
-      bgDefault: ColorService.PRIMARY,
-      bgHover: ColorService.PRIMARY2,
-      colorBorderDefault: ColorService.PRIMARY,
-      colorBorderHover: ColorService.PRIMARY2,
-      bgDisabled: ColorService.LIGHT,
-      color: ColorService.WHITE,
-      colorHover: ColorService.WHITE,
-    };
-  }
-
+const getTheme = (): IButtonStyled => {
   return {
     bgDefault: ColorService.LIGHT,
     bgHover: ColorService.PRIMARY2,
     colorBorderDefault: ColorService.LIGHT,
     colorBorderHover: ColorService.LIGHT,
     bgDisabled: ColorService.LIGHT,
-    color: ColorService.GRAY,
+    color: '#4C4B5E',
     colorHover: ColorService.WHITE,
   };
 };
@@ -65,26 +29,18 @@ interface IButtonStyled {
 interface IButton {
   disabled?: boolean;
   onClick: () => void;
-  state: boolean;
-  theme: 'primary' | 'secondary' | 'delete' | 'default';
 }
 
-interface IIcon {
-  theme: 'primary' | 'secondary' | 'delete' | 'default';
-}
-
-const LikeIconStyled = styled(LikeIcon)<IIcon>`
+const LikeIconStyled = styled(LikeIcon)`
   path {
-    fill: ${(prop) =>
-      prop.theme == 'secondary' || prop.theme == 'default' ? '#4C4B5E' : '#FFFFFF'};
   }
 `;
 
-export const LikeButton = ({ disabled, onClick, theme }: IButton) => {
-  const selectedTheme = getTheme(theme);
+export const LikeButton = ({ disabled, onClick }: IButton) => {
+  const selectedTheme = getTheme();
   return (
     <ButtonStyled onClick={onClick} disabled={disabled} {...selectedTheme}>
-      <LikeIconStyled theme={theme} />
+      <LikeIconStyled />
     </ButtonStyled>
   );
 };
@@ -97,6 +53,9 @@ const ButtonStyled = styled.button<IButtonStyled>`
   background: ${({ bgDefault }) => bgDefault};
   border: ${({ colorBorderDefault }) => `1px solid  ${colorBorderDefault}`};
   color: ${({ color }) => color};
+  svg path {
+    fill: ${({ color }) => color};
+  }
   :disabled {
     background: ${({ bgDisabled }) => bgDisabled};
     border: ${({ bgDisabled }) => `1px solid  ${bgDisabled}`};
