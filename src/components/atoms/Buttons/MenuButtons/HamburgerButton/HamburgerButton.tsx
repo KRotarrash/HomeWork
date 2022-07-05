@@ -1,33 +1,60 @@
 import styled from 'styled-components';
+import { ColorService } from '../../../../../services/ColorService';
 
 interface IMenuButton {
-  state: boolean;
+  state?: boolean;
 }
 
 export const HamburgerButton = ({ state }: IMenuButton) => (
   <Wrapper>
-    <ButtonIcon state>+</ButtonIcon>
+    <ButtonIcon state={state}></ButtonIcon>
   </Wrapper>
 );
 
-const ButtonIcon = styled.div<{ state: boolean }>`
-  position: relative;
-  color: #ffffff;
-  font-size: 32px;
-  transform: rotate(45deg);
-  left: 3%;
-  top: -3%;
+const ButtonIcon = styled.div<{ state?: boolean }>`
+  display: block;
+  background-color: ${ColorService.WHITE};
+  height: 2px;
+  width: 20px;
+  border-radius: 2px;
+  content: '';
+  visibility: ${({ state }) => (state ? 'visible' : 'hidden')};
+
+  ::after {
+    visibility: visible;
+    position: absolute;
+    margin-top: ${({ state }) => (state ? '6px' : '0px')};
+    display: block;
+    background-color: ${ColorService.WHITE};
+    height: 2px;
+    width: 20px;
+    border-radius: 2px;
+    content: '';
+    transform: ${({ state }) => (state ? 'none' : 'rotate(-45deg)')};
+  }
+
+  ::before {
+    visibility: visible;
+    position: absolute;
+    margin-top: ${({ state }) => (state ? '-6px' : '0px')};
+    display: block;
+    background-color: ${ColorService.WHITE};
+    height: 2px;
+    width: 20px;
+    border-radius: 2px;
+    content: '';
+    transform: ${({ state }) => (state ? 'none' : 'rotate(45deg)')};
+  }
 `;
 
 const Wrapper = styled.div`
-  position: absolute;
-  justify-content: center;
-  align-items: center;
   display: flex;
-  height: 84px;
-  width: 84px;
-  left: 0%;
-  right: 0%;
-  top: 0%;
-  bottom: 0%;
+  align-items: center;
+  background-color: ${ColorService.PRIMARY};
+  padding: 35px 32px;
+  cursor: pointer;
+
+  :hover {
+    background-color: ${ColorService.PRIMARY2};
+  }
 `;
