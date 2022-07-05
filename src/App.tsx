@@ -8,6 +8,8 @@ import { Tabs } from './components/atoms/Tabs';
 import styled from 'styled-components';
 import { Search } from './components/atoms/Buttons/Search';
 import { Authorize } from './components/atoms/Buttons/Authorize';
+import { LikeButton } from './components/atoms/Buttons/Like';
+import { DislikeButton } from './components/atoms/Buttons/Dislike';
 
 function App() {
   const onClick = () => {
@@ -61,6 +63,11 @@ function App() {
         <Authorize onClick={onClick} theme={'primary'} userName="" />
         <Authorize onClick={onClick} theme={'primary'} userName="William Shakespeare" />
         <Authorize onClick={onClick} theme={'primary'} userName="Opa Loper" />
+
+        <LikeButton onClick={onClick} theme={'default'} state />
+        <LikeButton onClick={onClick} theme={'default'} state disabled={true} />
+        <DislikeButton onClick={onClick} theme={'default'} state={false} />
+        <DislikeButton onClick={onClick} theme={'default'} state={false} disabled={true} />
       </header>
     </div>
   );
