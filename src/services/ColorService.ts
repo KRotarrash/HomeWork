@@ -6,6 +6,7 @@ class ColorApiService {
   public PRIMARY2 = '#5360CD';
   public SECONDARY = '#313037';
   public GRAY = '#8D8E97';
+  public GRAY2 = '#4C4B5E';
   public MEDIUM = '#DADADA';
   public ERROR = '#FD3419';
   public LIGHT = '#E8E8E8';

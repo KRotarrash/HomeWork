@@ -11,7 +11,7 @@ const getTheme = (): IButtonStyled => {
     colorBorderDefault: ColorService.LIGHT,
     colorBorderHover: ColorService.ERROR,
     bgDisabled: ColorService.LIGHT,
-    color: '#4C4B5E',
+    color: ColorService.GRAY2,
     colorHover: ColorService.WHITE,
   };
 };
