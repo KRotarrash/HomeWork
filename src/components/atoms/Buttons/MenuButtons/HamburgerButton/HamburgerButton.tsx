@@ -2,48 +2,48 @@ import styled from 'styled-components';
 import { ColorService } from '../../../../../services/ColorService';
 
 interface IMenuButton {
-  state?: boolean;
+  isVisible?: boolean;
 }
 
-export const HamburgerButton = ({ state }: IMenuButton) => (
+export const HamburgerButton = ({ isVisible: isVisible }: IMenuButton) => (
   <Wrapper>
-    <ButtonIcon state={state}></ButtonIcon>
+    <ButtonIcon isVisible={isVisible}></ButtonIcon>
   </Wrapper>
 );
 
-const ButtonIcon = styled.div<{ state?: boolean }>`
+const ButtonIcon = styled.div<{ isVisible?: boolean }>`
   display: block;
   background-color: ${ColorService.WHITE};
   height: 2px;
   width: 20px;
   border-radius: 2px;
   content: '';
-  visibility: ${({ state }) => (state ? 'visible' : 'hidden')};
+  visibility: ${({ isVisible }) => (isVisible ? 'visible' : 'hidden')};
 
   ::after {
     visibility: visible;
     position: absolute;
-    margin-top: ${({ state }) => (state ? '6px' : '0px')};
+    margin-top: ${({ isVisible }) => (isVisible ? '6px' : '0px')};
     display: block;
     background-color: ${ColorService.WHITE};
     height: 2px;
     width: 20px;
     border-radius: 2px;
     content: '';
-    transform: ${({ state }) => (state ? 'none' : 'rotate(-45deg)')};
+    transform: ${({ isVisible }) => (isVisible ? 'none' : 'rotate(-45deg)')};
   }
 
   ::before {
     visibility: visible;
     position: absolute;
-    margin-top: ${({ state }) => (state ? '-6px' : '0px')};
+    margin-top: ${({ isVisible }) => (isVisible ? '-6px' : '0px')};
     display: block;
     background-color: ${ColorService.WHITE};
     height: 2px;
     width: 20px;
     border-radius: 2px;
     content: '';
-    transform: ${({ state }) => (state ? 'none' : 'rotate(45deg)')};
+    transform: ${({ isVisible }) => (isVisible ? 'none' : 'rotate(45deg)')};
   }
 `;
 

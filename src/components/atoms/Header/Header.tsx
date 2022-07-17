@@ -1,13 +1,11 @@
 import styled from 'styled-components';
+import { ColorService } from '../../../services/ColorService';
 
-export const Header = () => <HeaderSite></HeaderSite>;
+export const Header = () => <HeaderStyled></HeaderStyled>;
 
-const HeaderSite = styled.div<{ valid?: boolean }>`
-  position: absolute;
-  left: 0%;
-  right: 0%;
-  top: 0%;
-  bottom: 0%;
+const HeaderStyled = styled.header`
+  background: ${ColorService.PRIMARY};
+  width: 100%;
   height: 84px;
-  background: #2231aa;
+  display: flex;
 `;

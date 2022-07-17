@@ -3,13 +3,26 @@ import styled from 'styled-components';
 
 import { ColorService } from '../../../../services/ColorService';
 import { ReactComponent as LikeIcon } from './../../../../assets/icons/like.svg';
+import { ReactComponent as DislikeIcon } from './../../../../assets/icons/dislike.svg';
 
-const getTheme = (): IButtonStyled => {
+const getTheme = (type: string): IButtonStyled => {
+  if (type == 'like') {
+    return {
+      bgDefault: ColorService.LIGHT,
+      bgHover: ColorService.PRIMARY2,
+      colorBorderDefault: ColorService.LIGHT,
+      colorBorderHover: ColorService.LIGHT,
+      bgDisabled: ColorService.LIGHT,
+      color: ColorService.GRAY2,
+      colorHover: ColorService.WHITE,
+    };
+  }
+
   return {
     bgDefault: ColorService.LIGHT,
-    bgHover: ColorService.PRIMARY2,
+    bgHover: ColorService.ERROR,
     colorBorderDefault: ColorService.LIGHT,
-    colorBorderHover: ColorService.LIGHT,
+    colorBorderHover: ColorService.ERROR,
     bgDisabled: ColorService.LIGHT,
     color: ColorService.GRAY2,
     colorHover: ColorService.WHITE,
@@ -29,6 +42,7 @@ interface IButtonStyled {
 interface IButton {
   disabled?: boolean;
   onClick: () => void;
+  type: 'like' | 'dislike';
 }
 
 const LikeIconStyled = styled(LikeIcon)`
@@ -36,11 +50,25 @@ const LikeIconStyled = styled(LikeIcon)`
   }
 `;
 
-export const LikeButton = ({ disabled, onClick }: IButton) => {
-  const selectedTheme = getTheme();
+const DislikeIconStyled = styled(DislikeIcon)`
+  path {
+  }
+`;
+
+export const LikeButton = ({ disabled, onClick, type }: IButton) => {
+  const selectedTheme = getTheme(type);
+
+  if (type == 'like') {
+    return (
+      <ButtonStyled onClick={onClick} disabled={disabled} {...selectedTheme}>
+        <LikeIconStyled />
+      </ButtonStyled>
+    );
+  }
+
   return (
     <ButtonStyled onClick={onClick} disabled={disabled} {...selectedTheme}>
-      <LikeIconStyled />
+      <DislikeIconStyled />
     </ButtonStyled>
   );
 };
