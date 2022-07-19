@@ -48,14 +48,13 @@ export const PostsPage = () => {
     let models = posts?.results;
     let max = from + count - 1;
 
-    let results: IPost[] = new Array();
-    let index = 0;
-    models?.forEach((x) => {
+    var results = models?.reduce((accumulator, item, index, array) => {
       if (index >= from && index <= max) {
-        results.push(x);
+        accumulator.push(item);
+        return accumulator;
       }
-      index = index + 1;
-    });
+      return accumulator;
+    }, new Array());
 
     return results;
   }
