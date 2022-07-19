@@ -13,6 +13,7 @@ import { FormTemplate } from './components/templates/FormTemplate/FormTemplate';
 import { PostsPage } from './components/pages/Posts/Posts';
 // import { Header } from './components/molecules/Header/Header;
 import { PostPage } from './components/pages/Post/Post';
+import { ContentTemplate } from './components/templates/FormTemplate/ContentTemplate';
 
 function App() {
   const onChange = async (event: ChangeEvent<HTMLInputElement>, field: string) => {
@@ -30,9 +31,9 @@ function App() {
             path="posts"
             element={
               // <div></div>
-              <FormTemplate title="text">
+              <ContentTemplate title="Blog">
                 <PostsPage />
-              </FormTemplate>
+              </ContentTemplate>
             }>
             {/* <Route
               path=":postID"
@@ -47,7 +48,7 @@ function App() {
             path="/posts/:postID"
             element={
               // <div></div>
-              <FormTemplate title="text">
+              <FormTemplate title="Post">
                 <PostPage />
               </FormTemplate>
             }></Route>

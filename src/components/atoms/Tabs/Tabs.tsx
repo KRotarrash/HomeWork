@@ -40,8 +40,9 @@ const Link = styled.a<{ active: boolean }>`
   line-height: 24px;
   font-family: ${getFontFamily('semibold')};
   color: ${ColorService.SECONDARY};
-  padding: 0 20px 24px;
+  padding: 0 40px 24px;
+  margin-right: 50px;
   display: block;
   border-bottom: ${({ active }) =>
-    `1px solid  ${active ? ColorService.SECONDARY : ColorService.TRANSPARENT}`};
+    `2px solid  ${active ? ColorService.SECONDARY : ColorService.TRANSPARENT}`};
 `;
