@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import { ColorService } from '../../../services/ColorService';
 import { getFontFamily } from '../../../services/FontService';
 import { Footer } from '../../atoms/Footer/Footer';
-import { Header } from '../../atoms/Header/Header';
 import { Container } from '../../layouts/Container/Container';
+import { Header } from '../../molecules/Header/Header';
 import { Title } from './Title';
 
 interface IFormTemplate {

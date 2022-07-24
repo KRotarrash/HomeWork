@@ -1,10 +1,18 @@
 import { url } from 'inspector';
 import { ReactNode, ChangeEvent, useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import styled from 'styled-components';
 import { URL } from 'url';
+import { Input } from '../../atoms/Input/Input';
 import { Tabs } from '../../atoms/Tabs';
 import { MainPost } from '../../molecules/Post/MainPost';
+import {
+  showPosts,
+  getPostsAsync,
+  removePosts,
+  toggleFavorite,
+} from '../../../core/slices/postsSlice';
 
 interface IPost {
   author: number;
@@ -24,40 +32,34 @@ interface IPostsInfo {
 }
 
 export const PostsPage = () => {
-  // const [sendedUser, setSendedUser] = useState(false);
+  const postsStore = useSelector(showPosts);
+  console.log({ postsStore });
+  const dispatch = useDispatch();
 
-  const [posts, setPosts] = useState<IPostsInfo>();
+  const firstPosts = postsStore?.results.slice(0, 1);
+  const mediumPosts = postsStore?.results.slice(1, 5);
+  const smallPosts = postsStore?.results.slice(5, 11);
+  const [searchValue, setSearchValue] = useState<string>('');
+  const [orderingValue, setOrderingValue] = useState<string>('');
+
+  const onChange = (event: ChangeEvent<HTMLInputElement>, field: string) => {
+    setSearchValue(event.target.value);
+  };
 
   useEffect(() => {
-    console.log('useEffect');
-    fetch('https://studapi.teachmeskills.by/blog/posts/?limit=20')
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-        setPosts(data);
-      });
-  }, []);
+    dispatch(getPostsAsync(searchValue, orderingValue) as any);
+  }, [searchValue, orderingValue, dispatch]);
 
-  const firstPosts = getPosts(0, 1);
-  const mediumPosts = getPosts(1, 4);
-  const smallPosts = getPosts(5, 6);
+  const searchInput = {
+    value: searchValue,
+    error: '',
+    type: 'text' as 'text',
+    labelText: 'Search',
+    placeholder: 'Placeholder',
+    disabled: false,
+  };
 
-  function getPosts(from: number, count: number) {
-    let models = posts?.results;
-    let max = from + count - 1;
-
-    var results = models?.reduce((accumulator, item, index, array) => {
-      if (index >= from && index <= max) {
-        accumulator.push(item);
-        return accumulator;
-      }
-      return accumulator;
-    }, new Array());
-
-    return results;
-  }
+  const onBlur = () => {};
 
   return (
     <>
@@ -68,6 +70,13 @@ export const PostsPage = () => {
           { title: 'Popular', url: 'popular' },
         ]}
         activeTabUrl="all"></Tabs>
+      <ContentSearchInput>
+        <Input
+          {...searchInput}
+          onChange={(event) => onChange(event, 'searchValue')}
+          onBlur={onBlur}
+        />
+      </ContentSearchInput>
       <ContentWrapper>
         <ContentLeftWrapper>
           {firstPosts?.map(({ date, title, id, text, image }) => (
@@ -144,103 +153,6 @@ const ContentRightWrapper = styled.div`
   margin-bottom: 0 0 20px 0;
 `;
 
-{
-  /* <List>
-        {posts?.results?.map(({ date, title, id }) => (
-          <Li key={id}>
-            {date} - {title}
-          </Li>
-        ))}
-      </List> */
-}
-
-{
-  /* <ContentWrapper>
-        <ContentLeftWrapper>
-          <MainPost
-            size="large"
-            imgUri={'https://tms-studapi-dev.s3.amazonaws.com/media/about03.png'}
-            date={new Date()}
-            id={1}
-            text="Ius dicat feugiat no, vix cu modo dicat principes. An nam instructior, commodo mediocrem id cum. Nec labore cetero theophrastus no, ei vero facer veritus nec. Ius dicat feugiat no, vix cu modo dicat principes. An nam debet instructior, commodo mediocrem id cum. Mandamus abhorreant deseruisse mea at, mea elit deserunt persequeris at, in putant fuisset honestatis qui."
-            title="Ius dicat feugiat no, vix cu modo dicat principes. An nam instructior, commodo mediocrem id cum. Nec labore cetero theophrastus no, ei vero facer veritus nec. Ius dicat feugiat no, vix cu modo dicat principes. An nam debet instructior, commodo mediocrem id cum. Mandamus abhorreant deseruisse mea at, mea elit deserunt persequeris at, in putant fuisset honestatis qui."></MainPost>
-          <ContentLefMediumBoxWrapper>
-            <MainPost
-              size="medium"
-              imgUri={'https://tms-studapi-dev.s3.amazonaws.com/media/about03.png'}
-              date={new Date()}
-              id={1}
-              text="Ius dicat feugiat no, vix cu modo dicat principes. An nam instructior, commodo mediocrem id cum. Nec labore cetero theophrastus no, ei vero facer veritus nec. Ius dicat feugiat no, vix cu modo dicat principes. An nam debet instructior, commodo mediocrem id cum. Mandamus abhorreant deseruisse mea at, mea elit deserunt persequeris at, in putant fuisset honestatis qui."
-              title="Ius dicat feugiat no, vix cu modo dicat principes. An nam instructior, commodo mediocrem id cum. Nec labore cetero theophrastus no, ei vero facer veritus nec. Ius dicat feugiat no, vix cu modo dicat principes. An nam debet instructior, commodo mediocrem id cum. Mandamus abhorreant deseruisse mea at, mea elit deserunt persequeris at, in putant fuisset honestatis qui."></MainPost>
-
-            <MainPost
-              size="medium"
-              imgUri={'https://tms-studapi-dev.s3.amazonaws.com/media/about03.png'}
-              date={new Date()}
-              id={1}
-              text="Ius dicat feugiat no, vix cu modo dicat principes. An nam instructior, commodo mediocrem id cum. Nec labore cetero theophrastus no, ei vero facer veritus nec. Ius dicat feugiat no, vix cu modo dicat principes. An nam debet instructior, commodo mediocrem id cum. Mandamus abhorreant deseruisse mea at, mea elit deserunt persequeris at, in putant fuisset honestatis qui."
-              title="Ius dicat feugiat no, vix cu modo dicat principes. An nam instructior, commodo mediocrem id cum. Nec labore cetero theophrastus no, ei vero facer veritus nec. Ius dicat feugiat no, vix cu modo dicat principes. An nam debet instructior, commodo mediocrem id cum. Mandamus abhorreant deseruisse mea at, mea elit deserunt persequeris at, in putant fuisset honestatis qui."></MainPost>
-
-            <MainPost
-              size="medium"
-              imgUri={'https://tms-studapi-dev.s3.amazonaws.com/media/about03.png'}
-              date={new Date()}
-              id={1}
-              text="Ius dicat feugiat no, vix cu modo dicat principes. An nam instructior, commodo mediocrem id cum. Nec labore cetero theophrastus no, ei vero facer veritus nec. Ius dicat feugiat no, vix cu modo dicat principes. An nam debet instructior, commodo mediocrem id cum. Mandamus abhorreant deseruisse mea at, mea elit deserunt persequeris at, in putant fuisset honestatis qui."
-              title="Ius dicat feugiat no, vix cu modo dicat principes. An nam instructior, commodo mediocrem id cum. Nec labore cetero theophrastus no, ei vero facer veritus nec. Ius dicat feugiat no, vix cu modo dicat principes. An nam debet instructior, commodo mediocrem id cum. Mandamus abhorreant deseruisse mea at, mea elit deserunt persequeris at, in putant fuisset honestatis qui."></MainPost>
-
-            <MainPost
-              size="medium"
-              imgUri={'https://tms-studapi-dev.s3.amazonaws.com/media/about03.png'}
-              date={new Date()}
-              id={1}
-              text="Ius dicat feugiat no, vix cu modo dicat principes. An nam instructior, commodo mediocrem id cum. Nec labore cetero theophrastus no, ei vero facer veritus nec. Ius dicat feugiat no, vix cu modo dicat principes. An nam debet instructior, commodo mediocrem id cum. Mandamus abhorreant deseruisse mea at, mea elit deserunt persequeris at, in putant fuisset honestatis qui."
-              title="Ius dicat feugiat no, vix cu modo dicat principes. An nam instructior, commodo mediocrem id cum. Nec labore cetero theophrastus no, ei vero facer veritus nec. Ius dicat feugiat no, vix cu modo dicat principes. An nam debet instructior, commodo mediocrem id cum. Mandamus abhorreant deseruisse mea at, mea elit deserunt persequeris at, in putant fuisset honestatis qui."></MainPost>
-          </ContentLefMediumBoxWrapper>
-        </ContentLeftWrapper>
-        <ContentRightWrapper>
-          <MainPost
-            size="small"
-            imgUri={'https://tms-studapi-dev.s3.amazonaws.com/media/about03.png'}
-            date={new Date()}
-            id={1}
-            text="Ius dicat feugiat no, vix cu modo dicat principes. An nam instructior, commodo mediocrem id cum. Nec labore cetero theophrastus no, ei vero facer veritus nec. Ius dicat feugiat no, vix cu modo dicat principes. An nam debet instructior, commodo mediocrem id cum. Mandamus abhorreant deseruisse mea at, mea elit deserunt persequeris at, in putant fuisset honestatis qui."
-            title="Ius dicat feugiat no, vix cu modo dicat principes. An nam instructior, commodo mediocrem id cum. Nec labore cetero theophrastus no, ei vero facer veritus nec. Ius dicat feugiat no, vix cu modo dicat principes. An nam debet instructior, commodo mediocrem id cum. Mandamus abhorreant deseruisse mea at, mea elit deserunt persequeris at, in putant fuisset honestatis qui."></MainPost>
-          <MainPost
-            size="small"
-            imgUri={'https://tms-studapi-dev.s3.amazonaws.com/media/about03.png'}
-            date={new Date()}
-            id={1}
-            text="Ius dicat feugiat no, vix cu modo dicat principes. An nam instructior, commodo mediocrem id cum. Nec labore cetero theophrastus no, ei vero facer veritus nec. Ius dicat feugiat no, vix cu modo dicat principes. An nam debet instructior, commodo mediocrem id cum. Mandamus abhorreant deseruisse mea at, mea elit deserunt persequeris at, in putant fuisset honestatis qui."
-            title="Ius dicat feugiat no, vix cu modo dicat principes. An nam instructior, commodo mediocrem id cum. Nec labore cetero theophrastus no, ei vero facer veritus nec. Ius dicat feugiat no, vix cu modo dicat principes. An nam debet instructior, commodo mediocrem id cum. Mandamus abhorreant deseruisse mea at, mea elit deserunt persequeris at, in putant fuisset honestatis qui."></MainPost>
-          <MainPost
-            size="small"
-            imgUri={'https://tms-studapi-dev.s3.amazonaws.com/media/about03.png'}
-            date={new Date()}
-            id={1}
-            text="Ius dicat feugiat no, vix cu modo dicat principes. An nam instructior, commodo mediocrem id cum. Nec labore cetero theophrastus no, ei vero facer veritus nec. Ius dicat feugiat no, vix cu modo dicat principes. An nam debet instructior, commodo mediocrem id cum. Mandamus abhorreant deseruisse mea at, mea elit deserunt persequeris at, in putant fuisset honestatis qui."
-            title="Ius dicat feugiat no, vix cu modo dicat principes. An nam instructior, commodo mediocrem id cum. Nec labore cetero theophrastus no, ei vero facer veritus nec. Ius dicat feugiat no, vix cu modo dicat principes. An nam debet instructior, commodo mediocrem id cum. Mandamus abhorreant deseruisse mea at, mea elit deserunt persequeris at, in putant fuisset honestatis qui."></MainPost>
-          <MainPost
-            size="small"
-            imgUri={'https://tms-studapi-dev.s3.amazonaws.com/media/about03.png'}
-            date={new Date()}
-            id={1}
-            text="Ius dicat feugiat no, vix cu modo dicat principes. An nam instructior, commodo mediocrem id cum. Nec labore cetero theophrastus no, ei vero facer veritus nec. Ius dicat feugiat no, vix cu modo dicat principes. An nam debet instructior, commodo mediocrem id cum. Mandamus abhorreant deseruisse mea at, mea elit deserunt persequeris at, in putant fuisset honestatis qui."
-            title="Ius dicat feugiat no, vix cu modo dicat principes. An nam instructior, commodo mediocrem id cum. Nec labore cetero theophrastus no, ei vero facer veritus nec. Ius dicat feugiat no, vix cu modo dicat principes. An nam debet instructior, commodo mediocrem id cum. Mandamus abhorreant deseruisse mea at, mea elit deserunt persequeris at, in putant fuisset honestatis qui."></MainPost>
-          <MainPost
-            size="small"
-            imgUri={'https://tms-studapi-dev.s3.amazonaws.com/media/about03.png'}
-            date={new Date()}
-            id={1}
-            text="Ius dicat feugiat no, vix cu modo dicat principes. An nam instructior, commodo mediocrem id cum. Nec labore cetero theophrastus no, ei vero facer veritus nec. Ius dicat feugiat no, vix cu modo dicat principes. An nam debet instructior, commodo mediocrem id cum. Mandamus abhorreant deseruisse mea at, mea elit deserunt persequeris at, in putant fuisset honestatis qui."
-            title="Ius dicat feugiat no, vix cu modo dicat principes. An nam instructior, commodo mediocrem id cum. Nec labore cetero theophrastus no, ei vero facer veritus nec. Ius dicat feugiat no, vix cu modo dicat principes. An nam debet instructior, commodo mediocrem id cum. Mandamus abhorreant deseruisse mea at, mea elit deserunt persequeris at, in putant fuisset honestatis qui."></MainPost>
-          <MainPost
-            size="small"
-            imgUri={'https://tms-studapi-dev.s3.amazonaws.com/media/about03.png'}
-            date={new Date()}
-            id={1}
-            text="Ius dicat feugiat no, vix cu modo dicat principes. An nam instructior, commodo mediocrem id cum. Nec labore cetero theophrastus no, ei vero facer veritus nec. Ius dicat feugiat no, vix cu modo dicat principes. An nam debet instructior, commodo mediocrem id cum. Mandamus abhorreant deseruisse mea at, mea elit deserunt persequeris at, in putant fuisset honestatis qui."
-            title="Ius dicat feugiat no, vix cu modo dicat principes. An nam instructior, commodo mediocrem id cum. Nec labore cetero theophrastus no, ei vero facer veritus nec. Ius dicat feugiat no, vix cu modo dicat principes. An nam debet instructior, commodo mediocrem id cum. Mandamus abhorreant deseruisse mea at, mea elit deserunt persequeris at, in putant fuisset honestatis qui."></MainPost>
-        </ContentRightWrapper>
-      </ContentWrapper> */
-}
+const ContentSearchInput = styled.div`
+  margin: 64px 0 20px 0;
+`;

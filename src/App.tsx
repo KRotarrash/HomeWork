@@ -14,6 +14,7 @@ import { PostsPage } from './components/pages/Posts/Posts';
 // import { Header } from './components/molecules/Header/Header;
 import { PostPage } from './components/pages/Post/Post';
 import { ContentTemplate } from './components/templates/FormTemplate/ContentTemplate';
+import { FavoritesPage } from './components/pages/Favorites/Favorites';
 
 function App() {
   const onChange = async (event: ChangeEvent<HTMLInputElement>, field: string) => {
@@ -34,23 +35,14 @@ function App() {
               <ContentTemplate title="Blog">
                 <PostsPage />
               </ContentTemplate>
-            }>
-            {/* <Route
-              path=":postID"
-              element={
-                // <div></div>
-                <FormTemplate title="text">
-                  <PostPage />
-                </FormTemplate>
-              }></Route> */}
-          </Route>
+            }></Route>
           <Route
             path="/posts/:postID"
             element={
               // <div></div>
-              <FormTemplate title="Post">
+              <ContentTemplate title="">
                 <PostPage />
-              </FormTemplate>
+              </ContentTemplate>
             }></Route>
           <Route
             path="/"
@@ -58,35 +50,19 @@ function App() {
               <FormTemplate title="text2">
                 <RegistrationPage />
               </FormTemplate>
-            }>
-            {/* <Route
-              path="/posts"
-              element={
-                // <div></div>
-                <FormTemplate title="text">
-                  <PostsPage />
-                </FormTemplate>
-              }
-            /> */}
-          </Route>
+            }></Route>
+          <Route
+            path="/favorites"
+            element={
+              // <div></div>
+              <FormTemplate title="favorites">
+                <FavoritesPage />
+              </FormTemplate>
+            }></Route>
         </Routes>
       </BrowserRouter>
     </div>
   );
 }
-
-// const FavoriteIconStyled = styled(FavoriteIcon)`
-//   path {
-//     fill: ${ColorService.SECONDARY};
-//   }
-// `;
-
-// fetch('https://studapi.teachmeskills.by/blog/posts/?limit=20')
-//   .then((response) => {
-//     return response.json();
-//   })
-//   .then((data) => {
-//     console.log(data);
-//   });
 
 export default App;

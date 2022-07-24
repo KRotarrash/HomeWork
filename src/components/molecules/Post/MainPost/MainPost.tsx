@@ -7,6 +7,7 @@ import { ReactComponent as LikeIcon } from './../../../../assets/icons/like.svg'
 import { ReactComponent as DislikeIcon } from './../../../../assets/icons/dislike.svg';
 import { ReactComponent as FavoriteIcon } from './../../../../assets/icons/favoritesIcon.svg';
 import { ReactComponent as EllipsisIcon } from './../../../../assets/icons/ellipsis.svg';
+import { Link } from '../../../atoms/Link/Link';
 
 interface IMainPost {
   id: number;
@@ -44,8 +45,8 @@ export const MainPost = ({ id, imgUri, text, date, title, size }: IMainPost) => 
             <DislikeIconStyled></DislikeIconStyled>
           </FlexContainer>
           <FlexContainer>
-            <FavoriteIconStyled></FavoriteIconStyled>
-            <EllipsisIconStyled></EllipsisIconStyled>
+            <FavoriteIconStyled />
+            <EllipsisIconStyled />
           </FlexContainer>
         </ContentFooter>
       </MainPostStyled>
@@ -58,6 +59,7 @@ export const MainPost = ({ id, imgUri, text, date, title, size }: IMainPost) => 
         <ContentMain>
           <ContentLeft size={size}>
             <DateStyled size={size}>{getDateWithFormat(date)}</DateStyled>
+            {/* <Link text={title} url={'/posts/' + id} disabled={false}></Link> */}
             <HeaderStyled href={'/posts/' + id} size={size}>
               {title}
             </HeaderStyled>
