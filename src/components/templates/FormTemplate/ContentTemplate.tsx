@@ -4,16 +4,16 @@ import styled from 'styled-components';
 import { ColorService } from '../../../services/ColorService';
 import { getFontFamily } from '../../../services/FontService';
 import { Footer } from '../../atoms/Footer/Footer';
+import { Header } from '../../atoms/Header/Header';
 import { Container } from '../../layouts/Container/Container';
-import { Header } from '../../molecules/Header/Header';
 import { Title } from './Title';
 
-interface IFormTemplate {
+interface IContentTemplate {
   children: ReactNode;
   title: string;
 }
 
-export const FormTemplate = ({ children, title }: IFormTemplate) => (
+export const ContentTemplate = ({ children, title }: IContentTemplate) => (
   <Wrapper>
     <Header />
     <Container>
@@ -43,21 +43,14 @@ const Content = styled.div`
 `;
 
 const FormContent = styled.div`
-  border: 1px solid #dadada;
-  padding: 40px;
+  /* border: 1px solid #dadada;
+  padding: 40px; */
 `;
 
 const Head = styled.div`
   text-align: left;
   padding: 72px 0;
 `;
-
-// const Title = styled.p`
-//   font-family: ${getFontFamily('bold')};
-//   font-size: 56px;
-//   line-height: 80px;
-//   color: ${ColorService.SECONDARY};
-// `;
 
 const Link = styled.a`
   font-family: ${getFontFamily()};
