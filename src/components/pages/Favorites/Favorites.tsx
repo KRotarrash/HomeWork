@@ -14,7 +14,7 @@ import { Input } from '../../atoms/Input';
 
 export const FavoritesPage = () => {
   const postsStore = useSelector(showPosts);
-  console.log('FavoritesPage showPosts', postsStore);
+  // console.log('FavoritesPage showPosts', postsStore);
 
   const dispatch = useDispatch();
   // const [postsV2, setPostsV2] = useState<IPostsInfo>();

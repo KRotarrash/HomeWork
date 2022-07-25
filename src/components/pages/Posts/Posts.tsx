@@ -1,5 +1,5 @@
 import { url } from 'inspector';
-import { ReactNode, ChangeEvent, useState, useEffect } from 'react';
+import { ReactNode, ChangeEvent, useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import styled from 'styled-components';
@@ -12,7 +12,10 @@ import {
   getPostsAsync,
   removePosts,
   toggleFavorite,
+  selectedPost,
 } from '../../../core/slices/postsSlice';
+import Modal from '../../atoms/Modal/Modal';
+import { Button } from '../../atoms/Buttons/Button';
 
 interface IPost {
   author: number;
@@ -42,6 +45,7 @@ export const PostsPage = () => {
   const [searchValue, setSearchValue] = useState<string>('');
   const [orderingValue, setOrderingValue] = useState<string>('');
 
+  const onBlur = () => {};
   const onChange = (event: ChangeEvent<HTMLInputElement>, field: string) => {
     setSearchValue(event.target.value);
   };
@@ -59,7 +63,14 @@ export const PostsPage = () => {
     disabled: false,
   };
 
-  const onBlur = () => {};
+  const [show, setShow] = useState(false);
+  const [imageModalSrc, setImageModalSrc] = useState('');
+
+  const imageOnClick = () => {
+    let selectedStore = postsStore?.results.find((x) => x.isSelected);
+    setImageModalSrc(selectedStore?.image ?? '');
+    setShow(true);
+  };
 
   return (
     <>
@@ -70,17 +81,24 @@ export const PostsPage = () => {
           { title: 'Popular', url: 'popular' },
         ]}
         activeTabUrl="all"></Tabs>
-      <ContentSearchInput>
+      <ContentBox>
+        <Modal show={show} onClose={() => setShow(false)}>
+          <ImageModal src={imageModalSrc} />
+        </Modal>
+        {/* <Button text="Show modal" onClick={() => setShow(true)} theme="primary"></Button> */}
+      </ContentBox>
+      <ContentBox>
         <Input
           {...searchInput}
           onChange={(event) => onChange(event, 'searchValue')}
           onBlur={onBlur}
         />
-      </ContentSearchInput>
+      </ContentBox>
       <ContentWrapper>
         <ContentLeftWrapper>
           {firstPosts?.map(({ date, title, id, text, image }) => (
             <MainPost
+              imageOnClick={() => imageOnClick()}
               key={id}
               size="large"
               imgUri={image}
@@ -92,6 +110,7 @@ export const PostsPage = () => {
           <ContentLefMediumBoxWrapper>
             {mediumPosts?.map(({ date, title, id, text, image }) => (
               <MainPost
+                imageOnClick={() => imageOnClick()}
                 key={id}
                 size="medium"
                 imgUri={image}
@@ -105,6 +124,7 @@ export const PostsPage = () => {
         <ContentRightWrapper>
           {smallPosts?.map(({ date, title, id, text, image }) => (
             <MainPost
+              imageOnClick={() => imageOnClick()}
               key={id}
               size="small"
               imgUri={image}
@@ -118,10 +138,6 @@ export const PostsPage = () => {
     </>
   );
 };
-
-const List = styled.ul``;
-
-const Li = styled.li``;
 
 const ContentWrapper = styled.div`
   padding: 64px 0;
@@ -153,6 +169,11 @@ const ContentRightWrapper = styled.div`
   margin-bottom: 0 0 20px 0;
 `;
 
-const ContentSearchInput = styled.div`
+const ContentBox = styled.div`
   margin: 64px 0 20px 0;
+`;
+
+const ImageModal = styled.img`
+  max-height: 350px;
+  max-width: 700px;
 `;
