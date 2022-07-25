@@ -2,12 +2,22 @@ import styled from 'styled-components';
 import { Url } from 'url';
 import { ColorService, getFontFamily } from '../../../../services';
 import { LikeButton } from '../../../atoms/Buttons/Like';
+import { ReactNode, ChangeEvent, useState, useEffect, useRef } from 'react';
 
 import { ReactComponent as LikeIcon } from './../../../../assets/icons/like.svg';
 import { ReactComponent as DislikeIcon } from './../../../../assets/icons/dislike.svg';
 import { ReactComponent as FavoriteIcon } from './../../../../assets/icons/favoritesIcon.svg';
 import { ReactComponent as EllipsisIcon } from './../../../../assets/icons/ellipsis.svg';
-import { Link } from '../../../atoms/Link/Link';
+import { useSelector, useDispatch } from 'react-redux';
+
+import {
+  showPosts,
+  getPostsAsync,
+  removePosts,
+  toggleFavorite,
+  selectedPost,
+  addPosts,
+} from '../../../../core/slices/postsSlice';
 
 interface IMainPost {
   id: number;
@@ -16,16 +26,20 @@ interface IMainPost {
   date: Date;
   title: string;
   size: 'large' | 'medium' | 'small';
+  imageOnClick?: () => void;
 }
 
 function getDateWithFormat(date: Date) {
   return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
-export const MainPost = ({ id, imgUri, text, date, title, size }: IMainPost) => {
+export const MainPost = ({ id, imgUri, text, date, title, size, imageOnClick }: IMainPost) => {
+  const postsStore = useSelector(showPosts);
+  const dispatch = useDispatch();
+
   if (size == 'large') {
     return (
-      <MainPostStyled size={size}>
+      <MainPostStyled onMouseMove={() => dispatch(selectedPost(id))} size={size}>
         <ContentMain>
           <ContentLeft size={size}>
             <DateStyled size={size}>{getDateWithFormat(date)}</DateStyled>
@@ -35,7 +49,7 @@ export const MainPost = ({ id, imgUri, text, date, title, size }: IMainPost) => 
             <TextStyled size={size}>{text}</TextStyled>
           </ContentLeft>
           <ContentRight>
-            <ImageStyled size={size} src={imgUri}></ImageStyled>
+            <ImageStyled onClick={imageOnClick} size={size} src={imgUri}></ImageStyled>
           </ContentRight>
         </ContentMain>
         <ContentFooter size={size}>
@@ -55,7 +69,7 @@ export const MainPost = ({ id, imgUri, text, date, title, size }: IMainPost) => 
 
   if (size == 'small') {
     return (
-      <MainPostStyled size={size}>
+      <MainPostStyled size={size} onMouseMove={() => dispatch(selectedPost(id))}>
         <ContentMain>
           <ContentLeft size={size}>
             <DateStyled size={size}>{getDateWithFormat(date)}</DateStyled>
@@ -65,7 +79,7 @@ export const MainPost = ({ id, imgUri, text, date, title, size }: IMainPost) => 
             </HeaderStyled>
           </ContentLeft>
           <ContentRight>
-            <ImageStyled size={size} src={imgUri}></ImageStyled>
+            <ImageStyled onClick={imageOnClick} size={size} src={imgUri}></ImageStyled>
           </ContentRight>
         </ContentMain>
         <ContentFooter size={size}>
@@ -84,10 +98,10 @@ export const MainPost = ({ id, imgUri, text, date, title, size }: IMainPost) => 
   }
 
   return (
-    <MainPostStyled size={size}>
+    <MainPostStyled onMouseMove={() => dispatch(selectedPost(id))} size={size}>
       <ContentMain>
         <ContentLeft size={size}>
-          <ImageStyled size={size} src={imgUri}></ImageStyled>
+          <ImageStyled onClick={imageOnClick} size={size} src={imgUri}></ImageStyled>
           <DateStyled size={size}>{getDateWithFormat(date)}</DateStyled>
           <HeaderStyled href={'/posts/' + id} size={size}>
             {title}

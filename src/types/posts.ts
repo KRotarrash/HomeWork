@@ -7,6 +7,7 @@ export interface IPost {
   text: string;
   title: string;
   isFavorite: boolean;
+  isSelected: boolean;
 }
 
 export interface IPostsInfo {

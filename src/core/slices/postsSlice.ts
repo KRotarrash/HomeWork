@@ -1,8 +1,9 @@
 import { createSlice, createAction } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 import { IPostsInfo, IPost } from '../../types/posts';
 
-const API_URL = 'https://studapi.teachmeskills.by/blog/posts/?limit=20';
+const API_URL = 'https://studapi.teachmeskills.by/blog/posts/?limit=11';
 
 interface IPostSate {
   posts: IPostsInfo | null;
@@ -32,6 +33,15 @@ export const postsSlide = createSlice({
         state.posts = { ...state.posts, results: newPosts };
       }
     },
+    selectedPost: (state, action) => {
+      if (state.posts) {
+        const newPosts = state?.posts.results.map((post: IPost) => ({
+          ...post,
+          isSelected: post.id === action.payload,
+        }));
+        state.posts = { ...state.posts, results: newPosts };
+      }
+    },
   },
 });
 
@@ -47,6 +57,7 @@ export const getPostsAsync =
     }
   };
 
-export const { addPosts, removePosts, toggleFavorite } = postsSlide.actions;
+export const { addPosts, removePosts, toggleFavorite, selectedPost } = postsSlide.actions;
 export const showPosts = (state: { posts: IPostSate }) => state.posts.posts;
+
 export default postsSlide.reducer;
