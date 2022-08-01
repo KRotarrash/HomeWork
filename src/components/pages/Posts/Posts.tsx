@@ -43,8 +43,8 @@ export const PostsPage = () => {
 
   const dispatch = useDispatch();
 
-  const selectedPage1 = useSelector(getSelectedPage);
-  const [pageNumber, setPageNumber] = useState(selectedPage1);
+  const selectedPagePaginator = useSelector(getSelectedPage);
+  const [pageNumber, setPageNumber] = useState(selectedPagePaginator);
 
   const postPerPage = 11;
   const pagesVisited = pageNumber * postPerPage;
