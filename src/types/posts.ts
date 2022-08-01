@@ -7,6 +7,7 @@ export interface IPost {
   text: string;
   title: string;
   isFavorite: boolean;
+  isSelected: boolean;
 }
 
 export interface IPostsInfo {
@@ -14,4 +15,5 @@ export interface IPostsInfo {
   next: string | null;
   previous: string | null;
   results: IPost[];
+  selectedPage: number;
 }
