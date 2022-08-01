@@ -3,14 +3,16 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { IPostsInfo, IPost } from '../../types/posts';
 
-const API_URL = 'https://studapi.teachmeskills.by/blog/posts/?limit=11';
+const API_URL = 'https://studapi.teachmeskills.by/blog/posts?';
 
 interface IPostSate {
   posts: IPostsInfo | null;
+  selectedPage: number;
 }
 
 const initialState: IPostSate = {
   posts: null,
+  selectedPage: 0,
 };
 
 export const postsSlide = createSlice({
@@ -18,7 +20,8 @@ export const postsSlide = createSlice({
   initialState,
   reducers: {
     addPosts: (state, action) => {
-      const posts = action.payload.results.map((post: IPost) => ({ ...post, isFavorite: false }));
+      const data = action.payload;
+      const posts = data.results.map((post: IPost) => ({ ...post, isFavorite: false }));
       state.posts = { ...action.payload, results: posts };
     },
     removePosts: (state) => {
@@ -42,14 +45,32 @@ export const postsSlide = createSlice({
         state.posts = { ...state.posts, results: newPosts };
       }
     },
+    selectedPost2: (state, action) => {
+      if (state.posts) {
+        const newPosts = state?.posts.results.map((post: IPost) => ({
+          ...post,
+          isSelected: post.id === action.payload,
+        }));
+        state.posts = { ...state.posts, results: newPosts };
+      }
+    },
+    selectedPage: (state, action) => {
+      if (state.posts) {
+        const selectedPage = action.payload;
+        state.selectedPage = selectedPage;
+        console.log(selectedPage, 'selectedPage');
+      }
+    },
   },
 });
 
 export const getPostsAsync =
-  (searchValue: string, orderingValue: string) => async (dispatch: any) => {
+  (searchValue: string, orderingValue: string, offset: number, limit: number) =>
+  async (dispatch: any) => {
     try {
       const response = await axios.get(
-        `${API_URL}` + `&search=${searchValue}&ordering=${orderingValue}`,
+        `${API_URL}` +
+          `search=${searchValue}&ordering=${orderingValue}&offset=${offset}&limit=${limit}`,
       );
       dispatch(addPosts(response.data));
     } catch (err: any) {
@@ -57,7 +78,9 @@ export const getPostsAsync =
     }
   };
 
-export const { addPosts, removePosts, toggleFavorite, selectedPost } = postsSlide.actions;
+export const { addPosts, removePosts, toggleFavorite, selectedPost, selectedPage } =
+  postsSlide.actions;
 export const showPosts = (state: { posts: IPostSate }) => state.posts.posts;
+export const getSelectedPage = (state: { posts: IPostsInfo }) => state.posts.selectedPage;
 
 export default postsSlide.reducer;

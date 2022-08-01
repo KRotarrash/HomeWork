@@ -15,4 +15,5 @@ export interface IPostsInfo {
   next: string | null;
   previous: string | null;
   results: IPost[];
+  selectedPage: number;
 }

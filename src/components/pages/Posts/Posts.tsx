@@ -1,5 +1,5 @@
 import { url } from 'inspector';
-import { ReactNode, ChangeEvent, useState, useEffect, useRef } from 'react';
+import { ReactNode, ChangeEvent, useState, useEffect, useRef, SetStateAction } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import styled from 'styled-components';
@@ -10,12 +10,16 @@ import { MainPost } from '../../molecules/Post/MainPost';
 import {
   showPosts,
   getPostsAsync,
+  getSelectedPage,
   removePosts,
   toggleFavorite,
   selectedPost,
+  selectedPage,
 } from '../../../core/slices/postsSlice';
 import Modal from '../../atoms/Modal/Modal';
 import { Button } from '../../atoms/Buttons/Button';
+import ReactPaginate from 'react-paginate';
+import { ColorService } from '../../../services';
 
 interface IPost {
   author: number;
@@ -36,12 +40,19 @@ interface IPostsInfo {
 
 export const PostsPage = () => {
   const postsStore = useSelector(showPosts);
-  console.log({ postsStore });
+
   const dispatch = useDispatch();
 
-  const firstPosts = postsStore?.results.slice(0, 1);
-  const mediumPosts = postsStore?.results.slice(1, 5);
-  const smallPosts = postsStore?.results.slice(5, 11);
+  const selectedPage1 = useSelector(getSelectedPage);
+  const [pageNumber, setPageNumber] = useState(selectedPage1);
+
+  const postPerPage = 11;
+  const pagesVisited = pageNumber * postPerPage;
+  const pageCount = Math.ceil(postsStore?.results?.length ?? 0 / postPerPage);
+
+  const firstPosts = postsStore?.results?.slice(0, 1);
+  const mediumPosts = postsStore?.results?.slice(1, 5);
+  const smallPosts = postsStore?.results?.slice(5, 11);
   const [searchValue, setSearchValue] = useState<string>('');
   const [orderingValue, setOrderingValue] = useState<string>('');
 
@@ -51,8 +62,8 @@ export const PostsPage = () => {
   };
 
   useEffect(() => {
-    dispatch(getPostsAsync(searchValue, orderingValue) as any);
-  }, [searchValue, orderingValue, dispatch]);
+    dispatch(getPostsAsync(searchValue, orderingValue, pagesVisited, postPerPage) as any);
+  }, [searchValue, orderingValue, pagesVisited, postPerPage, dispatch]);
 
   const searchInput = {
     value: searchValue,
@@ -70,6 +81,11 @@ export const PostsPage = () => {
     let selectedStore = postsStore?.results.find((x) => x.isSelected);
     setImageModalSrc(selectedStore?.image ?? '');
     setShow(true);
+  };
+
+  const changePage = (selectedItem: { selected: number }) => {
+    setPageNumber(selectedItem.selected);
+    dispatch(selectedPage(selectedItem.selected));
   };
 
   return (
@@ -135,6 +151,21 @@ export const PostsPage = () => {
           ))}
         </ContentRightWrapper>
       </ContentWrapper>
+      <StyledReactPaginate
+        previousLabel={'<- Prev'}
+        nextLabel={'Next ->'}
+        breakLabel={'...'}
+        pageCount={pageCount}
+        onPageChange={changePage}
+        containerClassName={'paginationButtons'}
+        previousLinkClassName={'previousButton'}
+        nextLinkClassName={'nextButton'}
+        disabledClassName={'paginationDisabled'}
+        activeClassName={'paginationActive'}
+        pageRangeDisplayed={2}
+        marginPagesDisplayed={2}
+      />
+      <ContentBox></ContentBox>
     </>
   );
 };
@@ -176,4 +207,32 @@ const ContentBox = styled.div`
 const ImageModal = styled.img`
   max-height: 350px;
   max-width: 700px;
+`;
+
+const StyledReactPaginate = styled(ReactPaginate)`
+  list-style: none;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+
+  li a {
+    border: 2px solid ${ColorService.PRIMARY};
+    cursor: pointer;
+    padding: 14px;
+    margin: 0 4px 0 0;
+    color: ${ColorService.PRIMARY};
+  }
+
+  li a:hover {
+    transition: 500ms linear;
+    border: 2px solid ${ColorService.WHITE};
+    background-color: ${ColorService.PRIMARY};
+    color: ${ColorService.WHITE};
+  }
+
+  li.paginationActive a {
+    border: 2px solid ${ColorService.PRIMARY};
+    background-color: ${ColorService.PRIMARY};
+    color: ${ColorService.WHITE};
+  }
 `;
