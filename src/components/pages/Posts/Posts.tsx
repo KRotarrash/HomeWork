@@ -101,7 +101,6 @@ export const PostsPage = () => {
         <Modal show={show} onClose={() => setShow(false)}>
           <ImageModal src={imageModalSrc} />
         </Modal>
-        {/* <Button text="Show modal" onClick={() => setShow(true)} theme="primary"></Button> */}
       </ContentBox>
       <ContentBox>
         <Input

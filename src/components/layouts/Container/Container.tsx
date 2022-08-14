@@ -11,7 +11,7 @@ export const Container = ({ children }: IContainer) => (
 );
 
 const ContainerStyled = styled.div`
-  max-width: 1120px;
+  max-width: 1200px;
   width: 100%;
   box-sizing: border-box;
   margin: auto;
